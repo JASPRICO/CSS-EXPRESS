@@ -36,8 +36,7 @@ app.get('/regist', async (req, res) => {
     try {
         const { user } = req.query;
         const { pass } = req.query;
-        const { correo } = req.query;
-        const [result] = await pool.query('INSERT INTO usuarios (usuario, clave, email) VALUES (?, ?, ?)', [user, pass, correo]);
+        const [result] = await pool.query('INSERT INTO usuarios (usuario, clave) VALUES (?, ?)', [user, pass]);
         if (result.affectedRows > 0) {
             res.send('Usuario registrado');
         } else {
@@ -48,64 +47,10 @@ app.get('/regist', async (req, res) => {
     }
 });
 
-// Ruta de recuperar contraseña
-app.get('/recuperar', async (req, res) => {
-    try {
-        const { user } = req.query;
-        const { correo } = req.query;
-        const [rows] = await pool.query('SELECT * FROM usuarios WHERE usuario = ? AND email = ?', [user, correo]);
-        if (rows.length > 0) {
-            res.send('correo enviado a ' + correo);
-        } else {
-            res.send('correo y/o usuario no encontrado');
-        }
-    } catch (err) {
-        res.status(500).send('Error en la consulta');
-    }
-});
-
-// Ruta de registro de cita
-app.get('/cita', async (req, res) => {
-    try {
-        const { car } = req.query;
-        const { cc } = req.query;
-        const { condu } = req.query;
-        const { dia } = req.query;
-        const { cont } = req.query;
-        const [result] = await pool.query('INSERT INTO citas (vehiculo, cedula, conductor, dia, contenedor) VALUES (?, ?, ?, ?, ?)', [car, cc, condu, dia, cont]);
-        if (result.affectedRows > 0) {
-            res.send('Cita registrada');
-        } else {
-            res.send('Cita ya registrada');
-        }
-    } catch (err) { 
-        res.status(500).send('Error en la consulta');
-    }
-});
-
-// consulta de citas
-app.get('/consulta', async (req, res) => {
-    try {
-        const { car } = req.query;
-        const { cc } = req.query;
-
-        const [rows] = await pool.query('SELECT * FROM citas WHERE vehiculo = ? AND cedula = ? AND dia = CURDATE()', [car, cc]);
-        if (rows.length > 0) {
-            res.send('INGRESO AUTORIZADO');
-        } else {
-            res.send('NO TIENE CITA PARA HOY ' + car);
-        }
-    } catch (err) {
-        res.status(500).send('Error en la consulta');
-    }
-});
-
 // Escuchar en el puerto 5000
 app.listen(5000, () => {
     console.log('Servidor corriendo en http://localhost:5000');
 });
-
-
 
 
 
