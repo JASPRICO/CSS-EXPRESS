@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = containesistemstore.netlify.app;
+const port = 5001;
 const path = require('path');
 
 
@@ -107,9 +107,9 @@ app.get('/consulta', async (req, res) => {
 
 
 
-// Escuchar en el puerto 5000
-app.listen(containesistemstore.netlify.app, () => {
-    console.log('containesistemstore.netlify.app');
+// Escuchar en el puerto 5001
+app.listen(5001, () => {
+    console.log('Escuchar en el puerto 5001');
 });
 
 
